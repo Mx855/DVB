@@ -1,0 +1,43 @@
+{
+  "expo": {
+    "name": "DVB",
+    "slug": "DVB",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/dvb_logo_application.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/dvb_logoV1.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/dvb_logov2.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.dvb.app"
+    },
+    "web": {
+      "favicon": "./assets/Logo_DVB_RVB.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a7595cd3-1f00-4b46-b290-34f1f57e2b9e"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+     "updates": {
+     "url": "https://u.expo.dev/a7595cd3-1f00-4b46-b290-34f1f57e2b9e",
+     "fallbackToCacheTimeout": 0,
+     "checkAutomatically": "ON_LOAD"
+    }
+  }
+}
