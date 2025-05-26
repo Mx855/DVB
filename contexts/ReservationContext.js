@@ -1,3 +1,4 @@
+// Exemple basique ReservationContext.js
 import React, { createContext, useState } from 'react';
 
 export const ReservationContext = createContext();
@@ -11,6 +12,7 @@ export const ReservationProvider = ({ children }) => {
     </ReservationContext.Provider>
   );
 };
+
 
 
 

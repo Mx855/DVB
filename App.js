@@ -11,6 +11,8 @@ import CalendarScreen from './screens/CalendarScreen';
 import ReservationHomeScreen from './screens/ReservationHomeScreen';
 import VehicleListScreen from './screens/VehicleListScreen';
 import ReservationFormScreen from './screens/ReservationFormScreen';
+import CommandeCodialScreen from './screens/CommandeCodialScreen';
+import RaccordLaitonASouderEtVisser from './screens/RaccordLaitonASouderEtVisser';
 
 // Contexte global des réservations
 import { ReservationProvider } from './contexts/ReservationContext';
@@ -51,8 +53,14 @@ export default function App() {
               <Stack.Screen name="Menu" component={MenuScreen} />
               <Stack.Screen name="Réservation véhicule" component={ReservationHomeScreen} />
               <Stack.Screen name="VehicleList" component={VehicleListScreen} />
-              <Stack.Screen name="ReservationForm" component={ReservationFormScreen} />
+              <Stack.Screen name="ReservationFormScreen" component={ReservationFormScreen} />
               <Stack.Screen name="Calendrier Réservation" component={CalendarScreen} />
+              <Stack.Screen name="CommandeCodial" component={CommandeCodialScreen} options={{ headerShown: false }} />
+              <Stack.Screen
+                name="RaccordLaitonASouderEtVisser"
+                component={RaccordLaitonASouderEtVisser}
+                options={{ headerShown: true, title: "Raccord laiton à souder et à visser" }}
+              />
             </>
           )}
         </Stack.Navigator>
@@ -61,6 +69,10 @@ export default function App() {
     </ReservationProvider>
   );
 }
+
+
+
+
 
 
 

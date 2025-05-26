@@ -2,7 +2,8 @@
   "expo": {
     "name": "DVB",
     "slug": "DVB",
-    "version": "1.0.0",
+    "sdkVersion": "53.0.0",
+    "version": "1.0.0",           
     "orientation": "portrait",
     "icon": "./assets/dvb_logo_application.png",
     "userInterfaceStyle": "light",
@@ -34,10 +35,14 @@
     "runtimeVersion": {
       "policy": "appVersion"
     },
-     "updates": {
-     "url": "https://u.expo.dev/a7595cd3-1f00-4b46-b290-34f1f57e2b9e",
-     "fallbackToCacheTimeout": 0,
-     "checkAutomatically": "ON_LOAD"
-    }
+    "updates": {
+      "url": "https://u.expo.dev/a7595cd3-1f00-4b46-b290-34f1f57e2b9e",
+      "fallbackToCacheTimeout": 0,
+      "checkAutomatically": "ON_LOAD"
+    },
+    "plugins": [
+      "expo-dev-client"
+    ]
   }
 }
+

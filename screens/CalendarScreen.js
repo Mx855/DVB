@@ -1,16 +1,21 @@
-import React, { useState, useCallback, useContext } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { View, Text, Alert, ScrollView, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
 import { Calendar } from 'react-native-calendars';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import dayjs from 'dayjs';
+import 'dayjs/locale/fr';
 import { ReservationContext } from '../contexts/ReservationContext';
+
+dayjs.locale('fr');
 
 const backgroundImage = require('../assets/Fond.jpg');
 
-const CalendrierScreen = () => {
+const CalendarScreen = () => {
   const [reservations, setReservations] = useContext(ReservationContext);
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth()); // 0-based
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+  const navigation = useNavigation();
 
   const chargerReservations = async () => {
     try {
@@ -29,33 +34,72 @@ const CalendrierScreen = () => {
   );
 
   const reservationsPourMois = reservations.filter(res => {
-    const start = new Date(res.debut);
-    const end = new Date(res.fin);
+    const debut = new Date(res.debut);
+    const fin = new Date(res.fin);
     return (
-      (start.getFullYear() === currentYear && start.getMonth() === currentMonth) ||
-      (end.getFullYear() === currentYear && end.getMonth() === currentMonth) ||
-      (start < new Date(currentYear, currentMonth + 1, 1) && end >= new Date(currentYear, currentMonth, 1))
+      (debut.getFullYear() === currentYear && debut.getMonth() === currentMonth) ||
+      (fin.getFullYear() === currentYear && fin.getMonth() === currentMonth) ||
+      (debut < new Date(currentYear, currentMonth + 1, 1) && fin >= new Date(currentYear, currentMonth, 1))
     );
   });
 
   const getMarkedDates = () => {
     const marked = {};
-
-    reservationsPourMois.forEach((res) => {
+    reservationsPourMois.forEach(res => {
       const start = new Date(res.debut);
       const end = new Date(res.fin);
-
       for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
         if (d.getFullYear() === currentYear && d.getMonth() === currentMonth) {
           const dateStr = d.toISOString().split('T')[0];
-          marked[dateStr] = {
-            customStyles: {
-              container: { backgroundColor: '#FFD700' },
-              text: { color: 'black', fontWeight: 'bold' }
-            }
-          };
+          if (!marked[dateStr]) {
+            marked[dateStr] = { customStyles: { container: {}, text: {} }, creneaux: [] };
+          }
+          marked[dateStr].creneaux.push(res.creneau);
         }
       }
+    });
+
+    Object.keys(marked).forEach(date => {
+      const creneaux = marked[date].creneaux;
+      if (creneaux.includes('journée entière') || (creneaux.includes('matin') && creneaux.includes('après-midi'))) {
+        marked[date].customStyles = {
+          container: {
+            backgroundColor: '#FFD700',
+            borderRadius: 20,
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
+          text: { color: 'black', fontWeight: 'bold' },
+        };
+      } else if (creneaux.includes('matin')) {
+        marked[date].customStyles = {
+          container: {
+            backgroundColor: 'white',
+            borderTopLeftRadius: 20,
+            borderBottomLeftRadius: 20,
+            borderLeftWidth: 20,
+            borderLeftColor: '#FFD700',
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
+          text: { color: 'black', fontWeight: 'bold' },
+        };
+      } else if (creneaux.includes('après-midi')) {
+        marked[date].customStyles = {
+          container: {
+            backgroundColor: 'white',
+            borderTopRightRadius: 20,
+            borderBottomRightRadius: 20,
+            borderRightWidth: 20,
+            borderRightColor: '#FFD700',
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
+          text: { color: 'black', fontWeight: 'bold' },
+        };
+      }
+
+      delete marked[date].creneaux;
     });
 
     return marked;
@@ -87,7 +131,14 @@ const CalendrierScreen = () => {
   return (
     <ImageBackground source={backgroundImage} style={styles.background}>
       <View style={styles.overlay}>
+        <View style={styles.headerRow}>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <Text style={styles.backButtonText}>← Retour</Text>
+          </TouchableOpacity>
+        </View>
+
         <Calendar
+          locale="fr"
           markingType={'custom'}
           markedDates={getMarkedDates()}
           style={styles.calendar}
@@ -119,6 +170,7 @@ const CalendrierScreen = () => {
               <Text style={styles.reservationName}>{res.nom} - {res.plaque}</Text>
               <Text style={styles.reservationDates}>{res.debut} → {res.fin}</Text>
               <Text style={styles.reservationReason}>{res.raison}</Text>
+              <Text style={styles.reservationCreneau}>Créneau : {res.creneau}</Text>
             </TouchableOpacity>
           ))}
         </ScrollView>
@@ -134,8 +186,22 @@ const styles = StyleSheet.create({
   },
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(255,255,255,0.85)', // Blanc semi-transparent pour lisibilité
     padding: 15,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 40,
+    marginBottom: 10,
+  },
+  backButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  backButtonText: {
+    color: '#005864',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   calendar: {
     borderRadius: 10,
@@ -172,9 +238,16 @@ const styles = StyleSheet.create({
     color: 'black',
     fontStyle: 'italic',
   },
+  reservationCreneau: {
+    color: 'black',
+  }
 });
 
-export default CalendrierScreen;
+export default CalendarScreen;
+
+
+
+
 
 
 

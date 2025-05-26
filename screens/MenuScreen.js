@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
 
-const backgroundImage = require('../assets/Fond.jpg'); // Assure-toi que le chemin est correct
+const backgroundImage = require('../assets/Fond.jpg');
 
 export default function MenuScreen({ navigation }) {
   return (
     <ImageBackground source={backgroundImage} style={styles.background}>
-      <View style={styles.overlay}>
-        <Text style={styles.title}>Menu principal - Version test OTA</Text>
+      <View style={styles.container}>
+        <Text style={styles.title}>Menu principal test</Text>
         
         <TouchableOpacity
           style={styles.menuButton}
@@ -30,13 +30,13 @@ export default function MenuScreen({ navigation }) {
           <Text style={styles.menuText}>3. Demande outillage</Text>
         </TouchableOpacity>
         
-        <TouchableOpacity
+        <TouchableOpacity 
           style={styles.menuButton}
-          onPress={() => alert('Commande Codial non implémenté')}
+          onPress={() => navigation.navigate('CommandeCodial')} 
         >
-          <Text style={styles.menuText}>4. Commande Codial</Text>
+         <Text style={styles.menuText}>4. Commande Codial</Text>
         </TouchableOpacity>
-        
+       
         <TouchableOpacity
           style={styles.menuButton}
           onPress={() => navigation.navigate('Calendrier Réservation')}
@@ -53,9 +53,8 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: 'cover',
   },
-  overlay: {
+  container: {
     flex: 1,
-    backgroundColor: 'rgba(255,255,255,0.85)', // blanc semi-transparent pour la lisibilité
     paddingTop: 60,
     paddingHorizontal: 20,
     alignItems: 'center',
@@ -63,8 +62,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     marginBottom: 20,
-    color: 'black',
+    color: 'white', // texte en blanc pour bien contraster avec le fond
     fontWeight: 'bold',
+    textShadowColor: 'rgba(0,0,0,0.7)', // ombre pour meilleure lisibilité
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 3,
   },
   menuButton: {
     backgroundColor: '#005864',
@@ -76,8 +78,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   menuText: {
-    color: 'black',
+    color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
   },
 });
+
